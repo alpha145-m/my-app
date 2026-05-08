@@ -35,12 +35,17 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.myapp.R
-import io.github.jan.supabase.realtime.Column
+import com.example.myapp.ui.theme.primaryColor
+import com.example.myapp.ui.theme.secondaryColor
 
-@Composable
+
 @Composable
 fun ForgotPasswordScreen(modifier: Modifier, navController: NavHostController){
     var emailInput by remember { mutableStateOf(TextFieldValue("")) }
