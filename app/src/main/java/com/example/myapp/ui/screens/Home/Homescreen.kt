@@ -8,14 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/* ---------------- DATA MODEL ---------------- */
+
 data class Car(
     val name: String,
     val price: String,
     val year: String
 )
 
-/* ---------------- HOME SCREEN ---------------- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Homescreen(modifier: Modifier = Modifier) {
@@ -82,7 +82,6 @@ fun Homescreen(modifier: Modifier = Modifier) {
     }
 }
 
-/* ---------------- CAR CARD ---------------- */
 @Composable
 fun CarCard(car: Car, modifier: Modifier = Modifier) {
     Card(

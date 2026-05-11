@@ -2,46 +2,53 @@ package com.example.myapp.ui.screens.authentication.Login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myapp.data.models.UserModel
 import com.example.myapp.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed class loginUiState(
+sealed class LoginUiState(
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val error: String? = null
 )
 
-class loginViewModel : ViewModel() {
+class LoginViewModel : ViewModel() {
 
-    val authRepository = AuthRepository()
+    private val authRepository = AuthRepository()
 
-    //     state
+    // State
     private var _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
     private var _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
+    // Methods
+    fun loginUser(email: String, password: String) {
 
-    //     methods
-    fun loginUser(userModel: UserModel) {
         _isLoading.value = true
+
         viewModelScope.launch {
 
             try {
-                authRepository.loginUser(userModel)
-                _isLoading.value =false
-                _message.value="success!"
-            }catch (e:Error){
-                _isLoading.value =false
-                _message.value="Oops! Something went wrong:${e.message}"
-            }
 
+                authRepository.run {
+                    loginUser(
+                        email,
+                        password
+                    )
+                }
+
+                _isLoading.value = false
+                _message.value = "Login Successful!"
+
+            } catch (e: Exception) {
+
+                _isLoading.value = false
+                _message.value = "Oops! Something went wrong: ${e.message}"
+            }
         }
     }
 }
-
 
