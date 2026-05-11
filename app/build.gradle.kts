@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.realtime.kt)
     implementation(libs.storage.kt)
     implementation(libs.supabase.kt)
+
 //ktor
     implementation(libs.ktor.client.android)
     //viewmodel
@@ -76,6 +77,7 @@ dependencies {
 //view media
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
 
 
 }

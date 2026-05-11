@@ -7,6 +7,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.myapp.ui.navigation.ROUTES
 
 
 data class Car(
@@ -18,7 +20,10 @@ data class Car(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Homescreen(modifier: Modifier = Modifier) {
+fun Homescreen(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
 
     val carList = remember {
         listOf(
@@ -75,7 +80,12 @@ fun Homescreen(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(filteredCars) { car ->
-                    CarCard(car)
+                    CarCard(
+                        car = car,
+                        onClick = {
+                            navController.navigate("${ROUTES.Details.name}/${car.name}/${car.price}/${car.year}")
+                        }
+                    )
                 }
             }
         }
@@ -83,7 +93,11 @@ fun Homescreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CarCard(car: Car, modifier: Modifier = Modifier) {
+fun CarCard(
+    car: Car,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(6.dp)
@@ -108,7 +122,7 @@ fun CarCard(car: Car, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(10.dp))
 
             Button(
-                onClick = { /* TODO: open details page */ },
+                onClick = onClick,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("View Details")

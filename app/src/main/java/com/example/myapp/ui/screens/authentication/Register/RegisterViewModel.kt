@@ -4,42 +4,58 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.models.UserModel
 import com.example.myapp.data.repository.AuthRepository
+import io.github.jan.supabase.auth.exception.AuthRestException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed class RegisterUiState(
-    val isLoading: Boolean = false,
-    val isSuccess: Boolean = false,
-    val error: String? = null
-)
 
 class RegisterViewModel : ViewModel() {
 
     val authRepository = AuthRepository()
 
-    //     state
     private var _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
     private var _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
-
-    //     methods
     fun registerUser(userModel: UserModel) {
-        _isLoading.value = true
+
         viewModelScope.launch {
 
             try {
-                authRepository.registerUser(userModel)
-                _isLoading.value =false
-                _message.value="success!"
-            }catch (e:Error){
-                _isLoading.value =false
-                _message.value="Oops! Something went wrong:${e.message}"
-            }
 
+                _isLoading.value = true
+
+                authRepository.registerUser(userModel)
+
+                _message.value = "Success!"
+
+            } catch (e: AuthRestException) {
+
+                _message.value =
+                    when (e.error) {
+
+                        "over_email_send_rate_limit" ->
+                            "Too many signup attempts. Wait a few minutes."
+
+                        "user_already_exists" ->
+                            "User already exists."
+
+                        else ->
+                            e.message ?: "Authentication failed"
+                    }
+
+            } catch (e: Exception) {
+
+                _message.value =
+                    "Oops! Something went wrong: ${e.localizedMessage}"
+
+            } finally {
+
+                _isLoading.value = false
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.myapp.ui.screens.authentication.Login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapp.data.models.UserModel
 import com.example.myapp.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,40 +16,30 @@ sealed class LoginUiState(
 
 class LoginViewModel : ViewModel() {
 
-    private val authRepository = AuthRepository()
+    val authRepository = AuthRepository()
 
-    // State
+    //     state
     private var _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
     private var _message = MutableStateFlow("")
     val message = _message.asStateFlow()
 
-    // Methods
-    fun loginUser(email: String, password: String) {
 
+    //     methods
+    fun loginUser(userModel: UserModel) {
         _isLoading.value = true
-
         viewModelScope.launch {
 
             try {
-
-                authRepository.run {
-                    loginUser(
-                        email,
-                        password
-                    )
-                }
-
+                authRepository.loginUser(userModel)
                 _isLoading.value = false
-                _message.value = "Login Successful!"
-
+                _message.value = "success!"
             } catch (e: Exception) {
-
                 _isLoading.value = false
-                _message.value = "Oops! Something went wrong: ${e.message}"
+                _message.value = "Oops! Something went wrong:${e.message}"
             }
+
         }
     }
 }
-
