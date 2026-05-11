@@ -1,6 +1,8 @@
 package com.example.myapp.ui.screens.onboarding
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.myapp.R
 import com.example.myapp.ui.navigation.ROUTES
+import com.example.myapp.ui.theme.darkColor
 import kotlinx.coroutines.launch
 
 data class OnboardingPage(
@@ -38,6 +43,20 @@ fun OnboardingScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val darkBg = Color(0xFF0D0B1F)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        darkColor,
+                        Color(0xFF000000),
+                        darkColor
+                    )
+                )
+            )
+    )
     val pages = listOf(
         OnboardingPage(
             title = "Find Your Dream Car",

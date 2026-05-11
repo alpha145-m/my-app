@@ -55,7 +55,7 @@ fun RegisterScreen(
     modifier: Modifier,
     registerViewModel: RegisterViewModel = viewModel(),
 ) {
-    val darkBg = Color(0xFF0D0B1F)
+    val darkColor = Color(0xFF000000)
     val pagePadding = 16.dp
     val isLoading by registerViewModel.isLoading.collectAsState()
     val responseMessage by registerViewModel.message.collectAsState()
@@ -68,9 +68,9 @@ fun RegisterScreen(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        darkBg,
-                        Color(0xFF151030),
-                        darkBg
+                        darkColor,
+                        Color(0xFF000000),
+                        darkColor
                     )
                 )
             )
