@@ -22,11 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil3.compose.AsyncImage
 import com.example.myapp.R
 import com.example.myapp.ui.navigation.ROUTES
 import com.example.myapp.ui.theme.darkColor
@@ -35,7 +37,7 @@ import kotlinx.coroutines.launch
 data class OnboardingPage(
     val title: String,
     val description: String,
-
+    val imageUrl: String
 )
 
 @Composable
@@ -43,7 +45,6 @@ fun OnboardingScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val darkBg = Color(0xFF0D0B1F)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -61,16 +62,17 @@ fun OnboardingScreen(
         OnboardingPage(
             title = "Find Your Dream Car",
             description = "Browse thousands of new and used cars from trusted sellers.",
-
+            imageUrl = "https://ovvxsvgqfpduneklgzln.supabase.co/storage/v1/object/public/onboarding/car%201.jpg"
         ),
         OnboardingPage(
             title = "Compare & Choose Easily",
             description = "Compare prices, features, and mileage in one place.",
+            imageUrl = "https://ovvxsvgqfpduneklgzln.supabase.co/storage/v1/object/public/onboarding/car%202.jpg"
         ),
         OnboardingPage(
             title = "Buy with Confidence",
             description = "Verified listings and secure transactions for peace of mind.",
-
+            imageUrl = "https://ovvxsvgqfpduneklgzln.supabase.co/storage/v1/object/public/onboarding/car%203.jpg"
         )
     )
 
@@ -97,7 +99,8 @@ fun OnboardingScreen(
         ) {
             Text(
                 text = "${pagerState.currentPage + 1} / ${pages.size}",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White
             )
 
             Button(
@@ -121,8 +124,6 @@ fun OnboardingScreen(
 
 @Composable
 fun OnboardingPageContent(page: OnboardingPage) {
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -130,24 +131,28 @@ fun OnboardingPageContent(page: OnboardingPage) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        AsyncImage(
+            model = page.imageUrl,
+            contentDescription = null,
+            modifier = Modifier
+                .size(300.dp)
+                .padding(bottom = 32.dp),
+            contentScale = ContentScale.Fit
+        )
 
-        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = page.title,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color.White
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = page.description,
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = Color.LightGray
         )
     }
 }
-
-
-
-
