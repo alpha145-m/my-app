@@ -26,6 +26,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,15 +61,25 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel()
 ) {
-    // inputs
     val darkColor = Color(0xFF000000)
     var emailInput by remember { mutableStateOf(TextFieldValue("")) }
     var passwordInput by remember { mutableStateOf(TextFieldValue("")) }
     var isVisible by remember { mutableStateOf(false) }
     
-    // state from viewmodel
     val isLoading by viewModel.isLoading.collectAsState()
     val message by viewModel.message.collectAsState()
+
+    // Observe login success
+    LaunchedEffect(Unit) {
+        viewModel.loginSuccess.collect { success ->
+            if (success) {
+                navController.navigate(ROUTES.Home.name) {
+                    popUpTo(ROUTES.Login.name) { inclusive = true }
+                }
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -89,10 +100,8 @@ fun LoginScreen(
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        // lottie animation
         LottieAnimationWidget(R.raw.auth_login, 300.dp)
 
-        // welcome message
         Text(
             text = "Login to get started",
             style = TextStyle(
@@ -104,7 +113,6 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // email input
         OutlinedTextField(
             value = emailInput,
             onValueChange = { emailInput = it },
@@ -123,14 +131,15 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
+                unfocusedBorderColor = primaryColor,
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
             ),
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
         
-        // password input
         OutlinedTextField(
             value = passwordInput,
             onValueChange = { passwordInput = it },
@@ -171,16 +180,17 @@ fun LoginScreen(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = secondaryColor,
-                unfocusedBorderColor = primaryColor
+                unfocusedBorderColor = primaryColor,
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White
             ),
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // login Button or Loader
         if (message.isNotEmpty()) {
-            Text(text = message)
+            Text(text = message, color = if (message == "Success!") Color.Green else Color.Red)
             Spacer(modifier = Modifier.height(8.dp))
         }
         
@@ -188,7 +198,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
         
         if (isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = primaryColor)
         } else {
             OutlinedButton(
                 onClick = {
@@ -218,22 +228,22 @@ fun LoginScreen(
             TextButton(onClick = { navController.navigate(ROUTES.ForgotPassword.name) }) {
                 Text(
                     text = "Forgot Password",
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(fontSize = 12.sp, color = Color.White)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
             TextButton(onClick = { navController.navigate(ROUTES.Register.name) }) {
                 Text(
                     text = "No account?",
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(fontSize = 12.sp, color = Color.White)
                 )
             }
         }
         
         TextButton(onClick = { navController.navigate(ROUTES.Home.name) }) {
             Text(
-                text = "back",
-                style = TextStyle(fontSize = 12.sp)
+                text = "Skip for now",
+                style = TextStyle(fontSize = 12.sp, color = Color.Gray)
             )
         }
     }

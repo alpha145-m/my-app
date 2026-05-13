@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel : ViewModel() {
 
-    private val authRepository = AuthRepository()
+    private val authRepository = AuthRepository
 
     // State
     private var _isLoading = MutableStateFlow(false)
@@ -24,7 +24,7 @@ class ForgotPasswordViewModel : ViewModel() {
 
         _isLoading.value = true
 
-        val launch = viewModelScope.launch {
+        viewModelScope.launch {
 
             try {
 
